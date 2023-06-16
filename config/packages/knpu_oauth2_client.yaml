@@ -6,3 +6,12 @@ knpu_oauth2_client:
       client_secret: '%env(resolve:GOOGLE_CLIENT_SECRET)%'
       redirect_route: connect_google_check
       redirect_params: { }
+    facebook:
+      type: facebook
+      client_id: '%env(OAUTH_FACEBOOK_CLIENT_ID)%'
+      client_secret: '%env(OAUTH_FACEBOOK_CLIENT_SECRET)%'
+      redirect_route: connect_facebook_check
+      redirect_params: { }
+      graph_api_version: v17.0
+      # whether to check OAuth2 "state": defaults to true
+      # use_state: true

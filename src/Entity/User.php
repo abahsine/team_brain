@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: '`user`')]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -19,6 +20,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public const ENTREPRENEUR = 'entrepreneur';
     public const ETUDIANT = 'etudiant';
+    public const UNKNOWN = '';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -38,13 +40,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(type: 'boolean')]
-    private $isVerified = false;
+    private bool $isVerified = false;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $googleId;
 
     #[ORM\Column(length: 255)]
-    private ?string $type = null;
+    private ?string $type = self::UNKNOWN;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $username = null;
@@ -75,6 +77,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToMany(targetEntity: Projet::class, inversedBy: 'users')]
     private Collection $projet;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $facebookId = null;
 
     public function __construct()
     {
@@ -241,9 +246,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    #[ORM\PrePersist]
+    public function setCreatedAt(): static
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = new \DateTimeImmutable();
 
         return $this;
     }
@@ -335,6 +341,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setGoogleId(?string $googleId)
     {
         $this->googleId = $googleId;
+        return $this;
+    }
+
+    public function getFacebookId(): ?string
+    {
+        return $this->facebookId;
+    }
+
+    public function setFacebookId(?string $facebookId): static
+    {
+        $this->facebookId = $facebookId;
+
         return $this;
     }
 }
