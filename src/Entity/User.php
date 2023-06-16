@@ -17,11 +17,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-
-    public const ENTREPRENEUR = 'entrepreneur';
-    public const ETUDIANT = 'etudiant';
-    public const UNKNOWN = '';
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -46,7 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $googleId;
 
     #[ORM\Column(length: 255)]
-    private ?string $type = self::UNKNOWN;
+    private string $type = UserTypeEnum::Unknown->value;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $username = null;
@@ -71,25 +66,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $prenom = null;
-
-    #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'projet')]
-    private Collection $skill;
-
-    #[ORM\ManyToMany(targetEntity: Projet::class, inversedBy: 'users')]
-    private Collection $projet;
-
+    
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $facebookId = null;
 
+    #[ORM\ManyToMany(targetEntity: Projet::class, inversedBy: 'users')]
+    private Collection $projets;
+
+    #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'users')]
+    private Collection $skills;
+
     public function __construct()
     {
-        $this->skill = new ArrayCollection();
-        $this->projet = new ArrayCollection();
+        $this->projets = new ArrayCollection();
+        $this->skills = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function __toString(): string
     {
-        return $this->id;
+        return $this->getEmail();
     }
 
     public function getEmail(): ?string
@@ -102,6 +97,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->email = $email;
 
         return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     /**
@@ -279,41 +279,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Skill>
-     */
-    public function getSkill(): Collection
-    {
-        return $this->skill;
-    }
-
-    public function addSkill(Skill $skill): static
-    {
-        if (!$this->skill->contains($skill)) {
-            $this->skill->add($skill);
-        }
-
-        return $this;
-    }
-
-    public function removeSkill(Skill $skill): static
-    {
-        $this->skill->removeElement($skill);
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Projet>
      */
-    public function getProjet(): Collection
+    public function getProjets(): Collection
     {
-        return $this->projet;
+        return $this->projets;
     }
 
     public function addProjet(Projet $projet): static
     {
-        if (!$this->projet->contains($projet)) {
-            $this->projet->add($projet);
+        if (!$this->projets->contains($projet)) {
+            $this->projets->add($projet);
         }
 
         return $this;
@@ -321,7 +297,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeProjet(Projet $projet): static
     {
-        $this->projet->removeElement($projet);
+        $this->projets->removeElement($projet);
 
         return $this;
     }
@@ -352,6 +328,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFacebookId(?string $facebookId): static
     {
         $this->facebookId = $facebookId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Skill>
+     */
+    public function getSkills(): Collection
+    {
+        return $this->skills;
+    }
+
+    public function addSkill(Skill $skill): static
+    {
+        if (!$this->skills->contains($skill)) {
+            $this->skills->add($skill);
+            $skill->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSkill(Skill $skill): static
+    {
+        if ($this->skills->removeElement($skill)) {
+            $skill->removeUser($this);
+        }
 
         return $this;
     }

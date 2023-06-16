@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Projet;
 use App\Entity\Skill;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -45,11 +46,14 @@ class DashboardController extends AbstractDashboardController
         return [
             MenuItem::linkToDashboard('Dashboard', 'fa fa-home'),
 
+            MenuItem::section('Users'),
+            MenuItem::linkToCrud('Users', 'fa fa-user', User::class),
+
             MenuItem::section('Skills'),
             MenuItem::linkToCrud('Skills', 'fa fa-tags', Skill::class),
 
-            MenuItem::section('Users'),
-            MenuItem::linkToCrud('Users', 'fa fa-user', User::class),
+            MenuItem::section('Projets'),
+            MenuItem::linkToCrud('Projets', 'fa fa-diagram-project', Projet::class),
 
             MenuItem::section(),
             MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out'),

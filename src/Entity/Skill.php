@@ -11,9 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: SkillRepository::class)]
 class Skill
 {
-    public const BACKEND = 'backend';
-    public const FRONTEND = 'frontend';
-    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -25,24 +22,24 @@ class Skill
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\ManyToMany(targetEntity: Projet::class, mappedBy: 'skills')]
-    private Collection $projets;
-
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'skill')]
-    private Collection $projet;
+    #[ORM\ManyToMany(targetEntity: Projet::class, mappedBy: 'skills')]
+    private Collection $projets;
+
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'skills')]
+    private Collection $users;
 
     public function __construct()
     {
         $this->projets = new ArrayCollection();
-        $this->projet = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function __toString(): string
     {
-        return $this->id;
+        return $this->getTag();
     }
 
     public function getTag(): ?string
@@ -55,6 +52,11 @@ class Skill
         $this->tag = $tag;
 
         return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getDescription(): ?string
@@ -111,8 +113,24 @@ class Skill
     /**
      * @return Collection<int, User>
      */
-    public function getProjet(): Collection
+    public function getUsers(): Collection
     {
-        return $this->projet;
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        $this->users->removeElement($user);
+
+        return $this;
     }
 }

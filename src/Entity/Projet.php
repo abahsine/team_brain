@@ -35,13 +35,18 @@ class Projet
     #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'projets')]
     private Collection $skills;
 
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'projet')]
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'projets')]
     private Collection $users;
 
     public function __construct()
     {
         $this->skills = new ArrayCollection();
         $this->users = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->getTitre();
     }
 
     public function getId(): ?int
