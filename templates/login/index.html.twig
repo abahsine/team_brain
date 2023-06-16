@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+    <section class="vh-100">
+        <div class="container py-5 h-100">
+            <div class="row d-flex align-items-center justify-content-center h-100">
+                <div class="col-md-8 col-lg-7 col-xl-5">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+                         class="img-fluid" alt="Phone image">
+                </div>
+                <div class="col-md-7 col-lg-5 col-xl-6 offset-xl-1 d-flex align-items-center">
+                    <form action="{{ path('app_login') }}" method="post">
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+
+                        {% if app.user %}
+                            <div class="mb-3">
+                                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                            </div>
+                        {% endif %}
+                        <!-- Email input -->
+                        <div class="form-outline mb-4">
+                            <input type="email" value="{{ last_username }}" name="_username" id="inputEmail"
+                                   class="form-control form-control-lg"
+                                   autocomplete="email" required autofocus>
+                            <label class="form-label" for="inputEmail">Email</label>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <input type="password" name="_password" id="inputPassword"
+                                   class="form-control form-control-lg" autocomplete="current-password"
+                                   required>
+                            <label class="form-label" for="inputPassword">Password</label>
+                        </div>
+
+                        <div class="d-flex justify-content-around align-items-center mb-4">
+                            <!-- Checkbox -->
+                            <div class="form-check">
+                                <input class="form-check-input" id="remember" type="checkbox" name="_remember_me">
+                                <label class="form-check-label" for="remember"> Se souvenir de moi </label>
+                            </div>
+                            <a href="#!">Password oublié ?</a>
+                        </div>
+
+                        <input type="hidden" name="_csrf_token"
+                               value="{{ csrf_token('authenticate') }}"
+                        >
+
+                        <!-- Submit button -->
+                        <div class="d-flex align-items-center justify-content-center">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">Se connecter</button>
+                        </div>
+
+
+                        <div class="divider d-flex align-items-center my-4">
+                            <p class="text-center fw-bold mx-3 mb-0 text-muted">OU</p>
+                        </div>
+
+                        <div class="divider d-flex align-items-center my-4">
+                            <a class="btn btn-lg btn-block btn-danger"
+                               style="background-color: #dd4b39; border-color: #dd4b39;"
+                               href="{{ path('connect_google') }}"
+                               role="button">
+                                <i class="bi bi-google me-2"></i> Continuer avec Google
+                            </a>
+                            <a class="btn btn-primary btn-lg btn-block"
+                               style="background-color: #3b5998; border-color: #3b5998;" href="#!"
+                               role="button">
+                                <i class="bi bi-facebook me-2"></i>Continuer avec Facebook
+                            </a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <style>
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+    </style>
+{% endblock %}
