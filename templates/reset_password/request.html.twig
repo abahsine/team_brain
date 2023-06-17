@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% block body %}
+    <div class="container d-flex flex-column">
+        <div class="row align-items-center justify-content-center
+          min-vh-100">
+            <div class="col-12 col-md-8 col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <h5>Mot de passe oublié ?</h5>
+                            <p class="mb-2">Entrer votre email pour réinitialiser le mot de passe
+                            </p>
+                        </div>
+                        {{ form_start(requestForm) }}
+                        <div class="mb-3">
+                            {{ form_row(requestForm.email) }}
+                        </div>
+                        <div class="mb-3 d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                Réinitialiser Password
+                            </button>
+                        </div>
+                        <span>Vous n'avez pas encore de compte ? <a
+                                    href="{{ path("app_register") }}">S'inscrire</a></span>
+                        {{ form_end(requestForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

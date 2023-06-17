@@ -16,7 +16,12 @@
 </head>
 
 <body>
-{% include  "menu.html.twig" %}
+{% if app.user %}
+    {% include  "menu.html.twig" %}
+{% endif %}
+
+{% include  "flashes.html.twig" %}
+
 {% block body %}
 
 {% endblock %}

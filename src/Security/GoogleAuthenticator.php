@@ -45,9 +45,7 @@ class GoogleAuthenticator extends OAuth2Authenticator
                 /** @var GoogleUser $googleUser */
                 $googleUser = $client->fetchUserFromToken($accessToken);
                 $email = $googleUser->getEmail();
-
-                $user = $this->entityManager->getRepository(User::class)->findOneBy(['googleId' => $googleUser->getId()]);
-                dump($googleUser);
+                $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
                 if (!$user) {
                     $user = new User();
                     $user->setEmail($email);

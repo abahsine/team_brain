@@ -15,8 +15,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -41,6 +43,14 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular('User')
+            ->setEntityLabelInPlural('Users')// ->setEntityPermission('ROLE_ADMIN')
+            ;
+    }
+
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
@@ -61,22 +71,21 @@ class UserCrudController extends AbstractCrudController
         $roles = ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_USER'];
 
         return [
+            FormField::addTab('Général'),
             IdField::new('id')->hideOnForm(),
-            EmailField::new('email')->setColumns(6),
+            DateField::new('createdAt')->hideOnForm(),
+            EmailField::new('email')->setColumns(4),
             ChoiceField::new('type')
                 ->setChoices(UserTypeEnum::cases())->renderAsBadges(
                     [UserTypeEnum::Entrepreneur->value => 'success', UserTypeEnum::Etudiant->value => 'info', UserTypeEnum::Unknown->value => 'danger'])
-                ->setColumns(6),
-            BooleanField::new('isVerified')
-                ->setColumns(6),
+                ->setColumns(4),
             TextField::new('username')
                 ->setFormTypeOptions(['attr' => ['autocomplete' => 'new-password']])
+                ->setColumns(4),
+            BooleanField::new('isVerified')
                 ->setColumns(6),
-            ChoiceField::new('roles')
-                ->setChoices(array_combine($roles, $roles))
-                ->allowMultipleChoices()
-                ->renderExpanded()
-                ->renderAsBadges(),
+
+            FormField::addTab('Contact'),
             TextField::new('nom')
                 ->setColumns(6),
             TextField::new('prenom')
@@ -88,6 +97,22 @@ class UserCrudController extends AbstractCrudController
                 ->setColumns(6),
             TelephoneField::new('telephone', 'Téléphone')
                 ->setColumns(6),
+
+            FormField::addTab('Liste des skills'),
+            AssociationField::new('skills')
+                ->autocomplete()
+                ->setFormTypeOption('by_reference', false),
+            FormField::addTab('Liste des projets'),
+            AssociationField::new('projets')
+                ->autocomplete()
+                ->setFormTypeOption('by_reference', false),
+
+            FormField::addTab('Sécurité'),
+            ChoiceField::new('roles')
+                ->setChoices(array_combine($roles, $roles))
+                ->allowMultipleChoices()
+                ->renderExpanded()
+                ->renderAsBadges(),
             TextField::new('password')
                 ->setFormType(RepeatedType::class)
                 ->setFormTypeOptions([
@@ -98,12 +123,6 @@ class UserCrudController extends AbstractCrudController
                 ])
                 ->setRequired($pageName === Crud::PAGE_NEW)
                 ->onlyOnForms(),
-            AssociationField::new('skills')
-                ->autocomplete()
-                ->setFormTypeOption('by_reference', false),
-            AssociationField::new('projets')
-                ->autocomplete()
-                ->setFormTypeOption('by_reference', false),
         ];
     }
 

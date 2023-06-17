@@ -14,10 +14,7 @@ class SkillType extends AbstractType
         $builder
             ->add('tag')
             ->add('description')
-            ->add('type')
-            ->add('projets')
-            ->add('projet')
-        ;
+            ->add('type');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

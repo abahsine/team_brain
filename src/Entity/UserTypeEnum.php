@@ -16,4 +16,12 @@ enum UserTypeEnum: string
             UserTypeEnum::Entrepreneur->name => UserTypeEnum::Entrepreneur->value,
         ];
     }
+
+    public static function choices(): array
+    {
+        return [
+            UserTypeEnum::Etudiant->name => UserTypeEnum::Etudiant->value,
+            UserTypeEnum::Entrepreneur->name => UserTypeEnum::Entrepreneur->value,
+        ];
+    }
 }

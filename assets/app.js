@@ -9,3 +9,9 @@
 import './styles/app.scss';
 import 'bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+
+var toastLiveExample = document.getElementsByClassName('toast')
+
+if (toastLiveExample) {
+    toastLiveExample.classList.add('show');
+}

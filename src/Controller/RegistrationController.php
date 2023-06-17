@@ -42,19 +42,23 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $user->setNom('');
+            $user->setPrenom('');
             $entityManager->persist($user);
             $entityManager->flush();
 
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
-                    ->from(new Address('odilon.hugonnot@gmail.com', 'Team Brain Bot'))
+                    ->from(new Address('contact@web-developpeur.com', 'Team Brain Bot'))
                     ->to($user->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
-            return $this->redirectToRoute('_wdt');
+            $this->addFlash('info', 'Un email vous a été envoyé pour vérifier votre adresse email, veuillez cliquer sur le lien de vérification.');
+
+            return $this->redirectToRoute('admin');
         }
 
         return $this->render('registration/register.html.twig', [
@@ -87,8 +91,8 @@ class RegistrationController extends AbstractController
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Your email address has been verified.');
+        $this->addFlash('success', 'Votre adresse email est vérifiée.');
 
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute('admin');
     }
 }

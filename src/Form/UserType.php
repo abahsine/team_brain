@@ -25,10 +25,7 @@ class UserType extends AbstractType
             ->add('dateNaissance')
             ->add('createdAt')
             ->add('nom')
-            ->add('prenom')
-            ->add('skill')
-            ->add('projet')
-        ;
+            ->add('prenom');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
