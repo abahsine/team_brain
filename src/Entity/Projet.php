@@ -148,12 +148,16 @@ class Projet
         return $this->users;
     }
 
-    public function getOwner(): User
+    public function getOwner(): ?User
     {
-        return $this->users->filter(
+        $owner = $this->users->filter(
             function (User $user) {
                 return $user->getType() === UserTypeEnum::Entrepreneur->value;
-            })->first();
+            });
+        if (!$owner->first()) {
+            return null;
+        }
+        return $owner->first();
     }
 
     public function getEquipe(): Collection
