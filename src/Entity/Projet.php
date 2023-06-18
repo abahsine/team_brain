@@ -148,6 +148,27 @@ class Projet
         return $this->users;
     }
 
+    public function getOwner(): User
+    {
+        return $this->users->filter(
+            function (User $user) {
+                return $user->getType() === UserTypeEnum::Entrepreneur->value;
+            })->first();
+    }
+
+    public function getEquipe(): Collection
+    {
+        return $this->users->filter(
+            function (User $user) {
+                return $user->getType() === UserTypeEnum::Etudiant->value;
+            });
+    }
+
+    public function containUser(User $user): bool
+    {
+        return $this->users->contains($user);
+    }
+
     public function addUser(User $user): static
     {
         if (!$this->users->contains($user)) {

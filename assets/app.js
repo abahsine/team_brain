@@ -10,8 +10,10 @@ import './styles/app.scss';
 import 'bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-var toastLiveExample = document.getElementsByClassName('toast')
 
-if (toastLiveExample) {
+// les flash messages
+let toastLiveExample = document.getElementsByClassName('toast')
+console.log(toastLiveExample);
+if (toastLiveExample.length > 0) {
     toastLiveExample.classList.add('show');
 }

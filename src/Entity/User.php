@@ -76,6 +76,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'users')]
     private Collection $skills;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $ville = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $pays = null;
+
     public function __construct()
     {
         $this->projets = new ArrayCollection();
@@ -84,7 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString(): string
     {
-        return $this->getEmail();
+        return $this->getUsername() ?? $this->getEmail();
     }
 
     public function getEmail(): ?string
@@ -355,6 +361,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->skills->removeElement($skill)) {
             $skill->removeUser($this);
         }
+
+        return $this;
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->ville;
+    }
+
+    public function setVille(string $ville): static
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    public function getPays(): ?string
+    {
+        return $this->pays;
+    }
+
+    public function setPays(string $pays): static
+    {
+        $this->pays = $pays;
 
         return $this;
     }

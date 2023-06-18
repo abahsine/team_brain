@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Projet;
 use App\Form\ProjetType;
 use App\Repository\ProjetRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -69,10 +70,21 @@ class ProjetController extends AbstractController
     #[Route('/{id}', name: 'app_projet_delete', methods: ['POST'])]
     public function delete(Request $request, Projet $projet, ProjetRepository $projetRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$projet->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $projet->getId(), $request->request->get('_token'))) {
             $projetRepository->remove($projet, true);
         }
 
         return $this->redirectToRoute('app_projet_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/{id}/addUser', name: 'app_projet_adduser', methods: ['GET'])]
+    public function addUser(Request $request, Projet $projet, ProjetRepository $projetRepository): Response
+    {
+        $projet->addUser($this->getUser());
+        $projetRepository->save($projet, true);
+
+        $route = $request->headers->get('referer');
+        return $this->redirect($route);
     }
 }
