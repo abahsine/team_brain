@@ -29,8 +29,9 @@ class LoginController extends AbstractController
         // controller can be blank: it will never be called!
         throw new \Exception('Don\'t forget to activate logout in security.yaml');
     }
-    
-    #[Route('/projets', name: 'home')]
+
+    #[Route('/projets', name: 'projets')]
+    #[Route('/', name: 'home')]
     public function dashboard(Request $request, ProjetRepository $projetRepository): Response
     {
         $projets = $projetRepository->findAll();

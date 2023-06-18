@@ -1,6 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <section>
+        <div class="container py-1 text-center">
+            <h1 class="display-5 fw-bold">Liste des projets</h1>
+            <div class="row justify-content-center mb-3">
+                <div class="input-group">
+                    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                           aria-describedby="search-addon"/>
+                </div>
+            </div>
+        </div>
+    </section>
     <section style="background-color: #eee;">
         <div class="container py-5">
             {% for projet in projets %}
@@ -13,7 +24,7 @@
                                         <div class="bg-image hover-zoom ripple rounded ripple-surface">
                                             <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/img%20(4).webp"
                                                  class="w-100"/>
-                                            <a href="{{ path('admin') }}">
+                                            <a href="{{ path('projets') }}">
                                                 <div class="hover-overlay">
                                                     <div class="mask"
                                                          style="background-color: rgba(253, 253, 253, 0.15);"></div>
@@ -22,7 +33,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-6 col-xl-6">
-                                        <a style="text-decoration: none;color: inherit;" href="{{ path('admin') }}">
+                                        <a style="text-decoration: none;color: inherit;" href="{{ path('projets') }}">
                                             <h5>{{ projet.titre }}</h5>
                                             <div class="d-flex flex-row">
                                                 <span>{{ projet.owner }}</span>
