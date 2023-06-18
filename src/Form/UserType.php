@@ -31,8 +31,8 @@ class UserType extends AbstractType
             ])
             ->add('nom', TextType::class)
             ->add('prenom', TextType::class)
-            ->add('ville')
-            ->add('pays');
+            ->add('ville', TextType::class, ["required" => false])
+            ->add('pays', TextType::class, ["required" => false]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

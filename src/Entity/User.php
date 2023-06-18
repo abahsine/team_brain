@@ -370,7 +370,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->ville;
     }
 
-    public function setVille(string $ville): static
+    public function setVille(?string $ville): static
     {
         $this->ville = $ville;
 
@@ -382,7 +382,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->pays;
     }
 
-    public function setPays(string $pays): static
+    public function setPays(?string $pays): static
     {
         $this->pays = $pays;
 
