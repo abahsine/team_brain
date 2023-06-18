@@ -19,9 +19,28 @@
                         <a href="#" class="nav-link">Contact</a>
                     </li>
                     {% if app.user is not empty %}
-                        <li class="nav-item">
-                            <a href="{{ path('app_user_edit',{id: app.user.id}) }}" class="nav-link">Mon compte</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                Mon compte
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li class="nav-item dropdown-item">
+                                    <a href="{{ path('app_user_edit',{id: app.user.id}) }}" class="nav-link">Editer mon
+                                        compte</a>
+                                </li>
+                                <li class="nav-item dropdown-item">
+                                    <a href="{{ path('admin') }}" class="nav-link">Admin</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="nav-item dropdown-item">
+                                    <a href="{{ path('app_logout') }}" class="nav-link">Déconnecter</a>
+                                </li>
+                            </ul>
                         </li>
+
                     {% else %}
                         <li class="nav-item">
                             <a href="{{ path("app_login") }}" class="nav-link">Se connecter</a>
