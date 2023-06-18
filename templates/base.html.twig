@@ -16,9 +16,9 @@
 </head>
 
 <body>
-{% if app.user %}
+{% block menu %}
     {% include  "menu.html.twig" %}
-{% endif %}
+{% endblock menu %}
 
 {% include  "flashes.html.twig" %}
 

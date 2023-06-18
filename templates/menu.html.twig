@@ -1,3 +1,34 @@
 <header class="mb-auto">
-
+    <nav class="navbar navbar-expand-lg  navbar-light" role="navigation">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html"><img src="../assets/images/yoga/coach-yoga.svg" alt=""></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbar-default-second" aria-controls="navbar-default-second"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar-default-second">
+                <ul class="navbar-nav ms-auto me-lg-3 ">
+                    <li class="nav-item">
+                        <a href="{{ path('projets') }}" class="nav-link">Projets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">A propos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Contact</a>
+                    </li>
+                    {% if app.user is not empty %}
+                        <li class="nav-item">
+                            <a href="{{ path('app_user_edit',{id: app.user.id}) }}" class="nav-link">Mon compte</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a href="{{ path("app_login") }}" class="nav-link">Se connecter</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
 </header>

@@ -199,6 +199,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function isEntrepreneur(): bool
+    {
+        return $this->type === UserTypeEnum::Entrepreneur->value;
+    }
+
+    public function isEtudiant(): bool
+    {
+        return $this->type === UserTypeEnum::Etudiant->value;
+    }
+
     public function getAdresse(): ?string
     {
         return $this->adresse;
