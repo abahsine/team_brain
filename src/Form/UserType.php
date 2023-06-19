@@ -36,6 +36,7 @@ class UserType extends AbstractType
                 'required' => true,
             ])
             ->add('skills', EntityType::class, [
+                'label' => "Compétences",
                 "class" => Skill::class,
                 'choice_label' => 'tag',
                 'multiple' => true,
