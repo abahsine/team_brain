@@ -4,7 +4,7 @@
     <section>
         <div class="container py-1 text-center">
             <h1 class="display-5 fw-bold">Liste des projets</h1>
-            {% if app.user.entrepreneur %}
+            {% if app.user is defined and app.user.entrepreneur %}
                 <div class="align-content-center align-items-center mt-3 mb-3">
                     <a href="{{ path('app_projet_new') }}" class="flex align-content-center  btn btn-primary"
                        type="submit"><i
