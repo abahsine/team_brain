@@ -4,8 +4,12 @@ namespace App\Form;
 
 use App\Entity\Projet;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class ProjetType extends AbstractType
 {
@@ -13,13 +17,27 @@ class ProjetType extends AbstractType
     {
         $builder
             ->add('titre')
-            ->add('description')
-            ->add('createdAt')
-            ->add('updatedAt')
-            ->add('endAt')
-            ->add('skills')
-            ->add('users')
-        ;
+            ->add('description', HiddenType::class)
+            ->add('endAt', DateType::class, [
+                'widget' => 'single_text',
+                'html5' => true,
+                'required' => false,
+            ])
+            ->add('image', FileType::class, [
+                "required" => false,
+                'mapped' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Uploader une image de type jpg ou png',
+                    ])
+                ],
+            ])
+            ->add('skills');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

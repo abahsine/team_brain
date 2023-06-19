@@ -26,12 +26,23 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li class="nav-item dropdown-item">
-                                    <a href="{{ path('app_user_edit',{id: app.user.id}) }}" class="nav-link">Editer mon
-                                        compte</a>
+                                    <a href="{{ path('app_user_edit',{id: app.user.id}) }}" class="nav-link">Mes
+                                        informations</a>
                                 </li>
                                 <li class="nav-item dropdown-item">
-                                    <a href="{{ path('admin') }}" class="nav-link">Admin</a>
+                                    <a href="" class="nav-link">Mes
+                                        projets</a>
                                 </li>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li class="nav-item dropdown-item">
+                                        <a href="{{ path('admin') }}" class="nav-link">Admin</a>
+                                    </li>
+                                {% endif %}
+                                {% if app.user.entrepreneur %}
+                                    <li class="nav-item dropdown-item">
+                                        <a href="{{ path('app_projet_new') }}" class="nav-link">Ajouter un projet</a>
+                                    </li>
+                                {% endif %}
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

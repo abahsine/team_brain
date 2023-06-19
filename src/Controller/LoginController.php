@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\ProjetRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -30,13 +28,9 @@ class LoginController extends AbstractController
         throw new \Exception('Don\'t forget to activate logout in security.yaml');
     }
 
-    #[Route('/projets', name: 'projets')]
-    #[Route('/', name: 'home')]
-    public function dashboard(Request $request, ProjetRepository $projetRepository): Response
+    #[Route('/', name: 'home', methods: ['GET'])]
+    public function home(): Response
     {
-        $projets = $projetRepository->findAll();
-        return $this->render('dashboard.html.twig', [
-            'projets' => $projets
-        ]);
+        return $this->redirectToRoute('projets');
     }
 }

@@ -1,4 +1,110 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<div class="container-fluid">
+    <div class="container">
+        {{ form_start(form) }}
+
+        <!-- Title -->
+        <div class="d-flex justify-content-between align-items-lg-center py-3 flex-column flex-lg-row">
+            <h2 class="h5 mb-3 mb-lg-0"><a href="{{ path('projets') }}" class="text-muted"><i
+                            class="bi bi-arrow-left-square me-2"></i></a> {{ action }} un projet</h2>
+            <div class="hstack gap-3">
+                <a href="{{ path('projets') }}" class="btn btn-light btn-sm btn-icon-text"><i class="bi bi-x"></i> <span
+                            class="text">Cancel</span></a>
+                <button class="btn btn-primary btn-sm btn-icon-text"><i class="bi bi-save"></i> <span
+                            class="text">Save</span></button>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="row">
+            <!-- Left side -->
+            <div class="col-lg-8">
+                <!-- Basic information -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3 class="h6 mb-4 fw-bold">Description du projet</h3>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                {{ form_row(form.titre) }}
+                            </div>
+                            <div class="col-lg-12">
+                                {{ form_row(form.description) }}
+                                <label for="projet_description" class="form-label required">Description</label>
+                                <trix-editor input="projet_description"></trix-editor>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    {{ form_row(form.endAt) }}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id='competences' style="display: none;" class="card mb-4">
+                    <div class="card-body">
+                        <h3 class="h6 mb-4">Compétences et savoir faire</h3>
+                        <div class="row">
+                            <div class="col-lg-12">
+                            </div>
+                            <div class="col-lg-12">
+                            </div>
+                            <div class="col-lg-12">
+                            </div>
+                            <div class="col-lg-6">
+                            </div>
+                        </div>
+                        <hr>
+                        <h3 class="h6 mb-4">Préférences</h3>
+                        <div class="row">
+                            <div class="col-lg-12">
+                            </div>
+                            <div class="col-lg-12">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Avatar -->
+            <div class="col-lg-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        {{ form_row(form.image) }}
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        {{ form_row(form.skills) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+
+<style>
+    trix-editor {
+        height: 350px;
+        margin-bottom: 15px;
+    }
+
+    .trix-button-group.trix-button-group--file-tools {
+        display: none;
+    }
+</style>

@@ -19,6 +19,22 @@
     <script>
         $(document).ready(function () {
             $('.js-example-basic-single').select2();
+            showCompetences();
         });
+
+        function showCompetences() {
+            let type_user = $("#user_type").val();
+            if (type_user === 'Etudiant') {
+                $("#competences").show();
+            } else {
+                $("#competences").hide();
+            }
+        }
+
+        $(document).on("change", "#user_type", function () {
+            showCompetences();
+        });
+
+
     </script>
 {% endblock %}

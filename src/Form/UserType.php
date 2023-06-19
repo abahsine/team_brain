@@ -43,22 +43,27 @@ class UserType extends AbstractType
                 "expanded" => false,
                 "by_reference" => false,
                 "mapped" => true,
+                "required" => false,
                 "attr" => ["class" => "js-example-basic-single", "style" => "width:100%;"]
             ])
             ->add('niveau', ChoiceType::class, [
                 'choices' => UserNiveauEnum::choices(),
+                "required" => false,
             ])
             ->add('preference', ChoiceType::class, [
                 'choices' => SkillTypeEnum::choices(),
+                "required" => false,
             ])
             ->add('interets', ChoiceType::class, [
                 'choices' => UserInteretEnum::choices(),
+                "required" => false,
                 'multiple' => true,
                 'expanded' => false,
                 "attr" => ["class" => "js-example-basic-single", "style" => "width:100%;"]
             ])
             ->add('frameworks', ChoiceType::class, [
                 'choices' => FrameworkEnum::choices(),
+                "required" => false,
                 'label' => 'Frameworks et CMS',
                 'multiple' => true,
                 'expanded' => false,

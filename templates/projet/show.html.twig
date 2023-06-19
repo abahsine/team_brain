@@ -3,40 +3,67 @@
 {% block title %}Projet{% endblock %}
 
 {% block body %}
-    <h1>Projet</h1>
+<div class="container mt-5 mb-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="images p-3">
+                            <div class="text-center p-4">
+                                {% set image = '/uploads/projets/projet.jpg' %}
+                                {% if projet.image is not empty %}
+                                    <img src="{{ asset('/uploads/projets/')~projet.image }}"
+                                         class="w-100"/>
+                                {% else %}
+                                    <img src="{{ asset(image) }}"
+                                         class="w-100"/>
+                                {% endif %}
+                            </div>
+                            <div class="p-4">
+                                <h4 class="mb-1 me-1">Equipe :</h4>
+                                <div class="d-flex flex-column">
+                                    <ul>
+                                        {% for user in projet.equipe %}
+                                            <li> {{ user }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="product p-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a class="anone" href="{{ path("projets") }}">
+                                    <div class="d-flex align-items-center"><i
+                                                class="bi bi-arrow-left-square me-2"></i>
+                                        <span
+                                                class="ml-1">Retour</span>
+                                    </div>
+                                </a>
+                                <i class="fa fa-shopping-cart text-muted"></i>
+                            </div>
+                            <div class="mt-4 mb-3">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ projet.id }}</td>
-            </tr>
-            <tr>
-                <th>Titre</th>
-                <td>{{ projet.titre }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ projet.description }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ projet.createdAt ? projet.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ projet.updatedAt ? projet.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>EndAt</th>
-                <td>{{ projet.endAt ? projet.endAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_projet_index') }}">back to list</a>
-
-    <a href="{{ path('app_projet_edit', {'id': projet.id}) }}">edit</a>
-
-    {{ include('projet/_delete_form.html.twig') }}
-{% endblock %}
+                                <h5 class="text-uppercase">{{ projet.titre }}</h5>
+                                <span class="text-muted brand">Responsable : {{ projet.owner }}</span>
+                                <div class="text-muted brand"> Compétences :
+                                    {% for skill in projet.skills %}
+                                        <span>{{ skill.tag }}</span>
+                                        {% if loop.last == false %}
+                                            <span class="text-primary"> • </span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <p class="about">
+                                {{ projet.description|raw }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
