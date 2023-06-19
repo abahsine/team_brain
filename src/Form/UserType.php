@@ -25,7 +25,11 @@ class UserType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, ['attr' => ['readonly' => 'readonly'], 'required' => true])
-            ->add('type', ChoiceType::class, ['choices' => UserTypeEnum::choices(), 'label_attr' => ['class' => 'fw-bold']])
+            ->add('type', ChoiceType::class, [
+                'label' => 'Vous êtes',
+                'choices' => UserTypeEnum::choices(),
+                'label_attr' => ['class' => 'fw-bold'],
+            ])
             ->add('username', TextType::class, ["required" => false, 'help' => 'Choisissez un username pour cacher votre email.'])
             ->add('adresse')
             ->add('codePostal')

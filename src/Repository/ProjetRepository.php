@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Projet;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -37,6 +38,14 @@ class ProjetRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function getMesProjets(User $user)
+    {
+        $qb = $this->createQueryBuilder("p")
+            ->where(':user MEMBER OF p.users')
+            ->setParameters(array('user' => $user));
+        return $qb->getQuery()->getResult();
     }
 
 //    /**

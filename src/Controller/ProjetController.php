@@ -26,6 +26,15 @@ class ProjetController extends AbstractController
         ]);
     }
 
+    #[Route('/mes-projets', name: 'mes_projets')]
+    public function mesProjets(ProjetRepository $projetRepository): Response
+    {
+        $projets = $projetRepository->getMesProjets($this->getUser());
+        return $this->render('projet/list.twig', [
+            'projets' => $projets
+        ]);
+    }
+
     #[IsGranted('ROLE_USER')]
     #[Route('/new', name: 'app_projet_new', methods: ['GET', 'POST'])]
     public function new(Request $request, ProjetRepository $projetRepository, SluggerInterface $slugger): Response
