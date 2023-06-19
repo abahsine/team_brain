@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
@@ -35,6 +36,10 @@ class ProjetCrudController extends AbstractCrudController
             Field::new('updatedAt')
                 ->hideOnForm(),
             TextField::new('titre'),
+            ImageField::new('image')
+                ->setUploadDir('/public/uploads/projets/')
+                ->setBasePath('/uploads/projets/')
+                ->setLabel('Image'),
             TextEditorField::new('description'),
             AssociationField::new('skills')
                 ->autocomplete()

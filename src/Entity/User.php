@@ -82,6 +82,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $pays = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $niveau = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $preference = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $interets = [];
+
+    #[ORM\Column(nullable: true)]
+    private ?array $frameworks = [];
+
     public function __construct()
     {
         $this->projets = new ArrayCollection();
@@ -395,6 +407,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPays(?string $pays): static
     {
         $this->pays = $pays;
+
+        return $this;
+    }
+
+    public function getNiveau(): ?string
+    {
+        return $this->niveau;
+    }
+
+    public function setNiveau(?string $niveau): static
+    {
+        $this->niveau = $niveau;
+
+        return $this;
+    }
+
+    public function getPreference(): ?string
+    {
+        return $this->preference;
+    }
+
+    public function setPreference(?string $preference): static
+    {
+        $this->preference = $preference;
+
+        return $this;
+    }
+
+    public function getInterets(): array
+    {
+        return $this->interets;
+    }
+
+    public function setInterets(?array $interets): static
+    {
+        $this->interets = $interets;
+
+        return $this;
+    }
+
+    public function getFrameworks(): array
+    {
+        return $this->frameworks;
+    }
+
+    public function setFrameworks(?array $frameworks): static
+    {
+        $this->frameworks = $frameworks;
 
         return $this;
     }

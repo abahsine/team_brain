@@ -22,6 +22,12 @@ class LoginSuccessEventSubscriber implements EventSubscriberInterface
     {
         /** @var User $user */
         $user = $event->getAuthenticatedToken()->getUser();
+        if (!$user->isVerified()) {
+            $this->request->getSession()->getFlashBag()->add('info', 'Votre compte n\'est pas encore validé, veuillez consulter vos mails et cliquer sur le lien de validation.');
+            $url = $this->router->generate('app_logout');
+            $event->setResponse(new RedirectResponse($url));
+        }
+
         if ($user->getType() === UserTypeEnum::Unknown->value || $user->getNom() == "" || $user->getPrenom() == "") {
             $this->request->getSession()->getFlashBag()->add('info', 'Votre compte n\'est pas complet veuillez renseigner les informations manquantes.');
             $url = $this->router->generate('app_user_edit', ["id" => $user->getId()]);

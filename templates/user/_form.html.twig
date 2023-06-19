@@ -58,8 +58,37 @@
                         </div>
                     </div>
                 </div>
-                <!-- Address -->
+
                 <div class="card mb-4">
+                    <div class="card-body">
+                        <h3 class="h6 mb-4">Compétences</h3>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                {{ form_row(form.niveau) }}
+                            </div>
+                            <div class="col-lg-12">
+                                {{ form_row(form.skills) }}
+                            </div>
+                            <div class="col-lg-12">
+                                {{ form_row(form.frameworks) }}
+                            </div>
+                            <div class="col-lg-6">
+                            </div>
+                        </div>
+                        <hr>
+                        <h3 class="h6 mb-4">Préférences</h3>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                {{ form_row(form.interets) }}
+                            </div>
+                            <div class="col-lg-12">
+                                {{ form_row(form.preference) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Address -->
+                <div class="visually-hidden card mb-4">
                     <div class="card-body">
                         <h3 class="h6 mb-4">Adresse</h3>
                         <div class="mb-3">
@@ -100,12 +129,14 @@
                     </div>
                 </div>
                 <!-- Avatar -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h3 class="h6">Avatar</h3>
-                        <input class="form-control" type="file">
+                {% if false %}
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h3 class="h6">Avatar</h3>
+                            <input class="form-control" type="file">
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
         </div>
         {{ form_end(form) }}

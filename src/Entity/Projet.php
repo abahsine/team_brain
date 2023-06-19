@@ -38,6 +38,9 @@ class Projet
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'projets')]
     private Collection $users;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
     public function __construct()
     {
         $this->skills = new ArrayCollection();
@@ -188,6 +191,18 @@ class Projet
         if ($this->users->removeElement($user)) {
             $user->removeProjet($this);
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

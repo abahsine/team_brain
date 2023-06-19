@@ -25,8 +25,14 @@
                                 <div class="row">
                                     <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
                                         <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/img%20(4).webp"
-                                                 class="w-100"/>
+                                            {% set image = '/uploads/projets/projet.jpg' %}
+                                            {% if projet.image is not empty %}
+                                                <img src="{{ asset('/uploads/projets/')~projet.image }}"
+                                                     class="w-100"/>
+                                            {% else %}
+                                                <img src="{{ asset(image) }}"
+                                                     class="w-100"/>
+                                            {% endif %}
                                             <a href="{{ path('projets') }}">
                                                 <div class="hover-overlay">
                                                     <div class="mask"
