@@ -54,8 +54,8 @@ class GoogleAuthenticator extends OAuth2Authenticator
                         $user,
                         $googleUser->getId()
                     ));
-                    $user->setPrenom($googleUser->getFirstName());
-                    $user->setNom($googleUser->getLastName());
+                    $user->setPrenom($googleUser->getFirstName() ?? "");
+                    $user->setNom($googleUser->getLastName() ?? "");
                     $user->setIsVerified(true);
                     $this->entityManager->persist($user);
                     $this->entityManager->flush();

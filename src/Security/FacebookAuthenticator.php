@@ -58,8 +58,8 @@ class FacebookAuthenticator extends OAuth2Authenticator
                         $facebookUser->getId()
                     );
                     $user->setPassword($hashedPassword);
-                    $user->setPrenom($facebookUser->getFirstName());
-                    $user->setNom($facebookUser->getLastName());
+                    $user->setPrenom($facebookUser->getFirstName() ?? "");
+                    $user->setNom($facebookUser->getLastName() ?? "");
                     $user->setFacebookId($facebookUser->getId());
                     $this->entityManager->persist($user);
                     $this->entityManager->flush();
