@@ -47,12 +47,13 @@ class ProjetType extends AbstractType
                 'class' => Skill::class,
                 'label' => 'Compétences recherchés',
                 'multiple' => true,
-                "attr" => ["class" => "js-example-basic-single", "style" => "width:100%;"]
+                "attr" => ["class" => "js-example-basic-single", "style" => "width:100%;"],
+                'required' => false
             ])
             ->add('type', ChoiceType::class, [
                 'label' => 'Type de projet',
                 'choices' => UserInteretEnum::choices(),
-                "required" => true,
+                "required" => false,
                 'multiple' => false,
                 'expanded' => false,
             ]);

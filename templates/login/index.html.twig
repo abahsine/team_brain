@@ -16,6 +16,11 @@
                         {% if error %}
                             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                         {% endif %}
+                        {% if app.request.get('message') == 'connect' %}
+                            <div class="alert alert-info">Veuillez vous inscrire ou vous connecter pour profiter de
+                                toutes les fonctionnalités.
+                            </div>
+                        {% endif %}
 
                         <div class="form-outline mb-4">
                             <input type="email" value="{{ last_username }}" name="_username" id="inputEmail"

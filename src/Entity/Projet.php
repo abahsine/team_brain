@@ -219,6 +219,12 @@ class Projet
         return $this->type;
     }
 
+    public function getTypeLabel(): ?string
+    {
+        $types = array_flip(UserInteretEnum::choices());
+        return $types[$this->type] ?? $this->type;
+    }
+
     public function setType(?string $type): static
     {
         $this->type = $type;

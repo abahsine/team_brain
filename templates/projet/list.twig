@@ -55,7 +55,7 @@
                                             <h5>{{ projet.titre }}</h5>
                                             {% if projet.type %}
                                                 <div class="d-flex flex-row">
-                                                    <span class="badge bg-primary">{{ projet.type }}</span>
+                                                    <span class="badge bg-primary">{{ projet.typeLabel }}</span>
                                                 </div>
                                             {% endif %}
                                             {% if false %}
@@ -182,6 +182,7 @@
             Array.from(buttons).forEach(function (button) {
                 button.addEventListener('click', async event => {
                     let roles = [];
+                    let errors = false
                     event.preventDefault();
                     await fetch('/inscriptions/' + button.dataset.projetId + '/roles')
                         .then(function (response) {
@@ -194,7 +195,12 @@
                                 document.getElementById('option-' + data[prop]).removeAttribute('disabled');
                                 roles.push("<b>" + prop + '</b>');
                             }
+                        }).catch(function (event) {
+                            window.location = '/login?message=connect'
+                            errors = true;
                         });
+                    if (errors)
+                        return false;
                     if (roles.length === 0) {
                         document.getElementById('info-roles').innerHTML = "ne pouvez postuler à rien";
                     } else {
