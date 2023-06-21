@@ -84,7 +84,8 @@
                                         <div class="d-flex flex-column">
                                             <ul>
                                                 {% for inscription in projet.inscriptions %}
-                                                    <li> {{ inscription.user|capitalize }} - {{ inscription.role }}</li>
+                                                    <li> {{ inscription.user|capitalize }}
+                                                        - {{ inscription.roleLabel }}</li>
                                                 {% endfor %}
                                             </ul>
                                         </div>

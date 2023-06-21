@@ -34,6 +34,12 @@ class Inscription
         return $this->role;
     }
 
+    public function getRoleLabel(): ?string
+    {
+        $types = array_flip(SkillTypeEnum::choices());
+        return $types[$this->role] ?? $this->role;
+    }
+
     public function setRole(string $role): static
     {
         $this->role = $role;
