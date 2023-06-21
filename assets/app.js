@@ -7,13 +7,13 @@
 
 // any CSS you import will output into a single css file (app.scss in this case)
 import './styles/app.scss';
-import 'bootstrap';
+import * as bootstrap from 'bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 
+window.bootstrap = bootstrap;
 // les flash messages
 let toastLiveExample = document.getElementsByClassName('toast')
-console.log(toastLiveExample);
 if (toastLiveExample.length > 0) {
     toastLiveExample.classList.add('show');
 }

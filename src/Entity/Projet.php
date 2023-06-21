@@ -35,16 +35,22 @@ class Projet
     #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'projets')]
     private Collection $skills;
 
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'projets')]
-    private Collection $users;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
+
+    #[ORM\OneToMany(mappedBy: 'projet', targetEntity: Inscription::class, orphanRemoval: true)]
+    private Collection $inscriptions;
+
+    #[ORM\ManyToOne(inversedBy: 'projets')]
+    private ?User $Owner = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $type = null;
 
     public function __construct()
     {
         $this->skills = new ArrayCollection();
-        $this->users = new ArrayCollection();
+        $this->inscriptions = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -67,6 +73,17 @@ class Projet
         $this->titre = $titre;
 
         return $this;
+    }
+
+    public function containUser(User $user): bool
+    {
+        $contain = false;
+        /** @var Inscription $inscription */
+        foreach ($this->inscriptions as $inscription) {
+            if ($inscription->getUser() === $user)
+                $contain = true;
+        }
+        return $contain;
     }
 
     public function getDescription(): ?string
@@ -143,58 +160,6 @@ class Projet
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function getOwner(): ?User
-    {
-        $owner = $this->users->filter(
-            function (User $user) {
-                return $user->getType() === UserTypeEnum::Entrepreneur->value;
-            });
-        if (!$owner->first()) {
-            return null;
-        }
-        return $owner->first();
-    }
-
-    public function getEquipe(): Collection
-    {
-        return $this->users->filter(
-            function (User $user) {
-                return $user->getType() === UserTypeEnum::Etudiant->value;
-            });
-    }
-
-    public function containUser(User $user): bool
-    {
-        return $this->users->contains($user);
-    }
-
-    public function addUser(User $user): static
-    {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->addProjet($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): static
-    {
-        if ($this->users->removeElement($user)) {
-            $user->removeProjet($this);
-        }
-
-        return $this;
-    }
-
     public function getImage(): ?string
     {
         return $this->image;
@@ -203,6 +168,60 @@ class Projet
     public function setImage(?string $image): static
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Inscription>
+     */
+    public function getInscriptions(): Collection
+    {
+        return $this->inscriptions;
+    }
+
+    public function addInscription(Inscription $inscription): static
+    {
+        if (!$this->inscriptions->contains($inscription)) {
+            $this->inscriptions->add($inscription);
+            $inscription->setProjet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscription(Inscription $inscription): static
+    {
+        if ($this->inscriptions->removeElement($inscription)) {
+            // set the owning side to null (unless already changed)
+            if ($inscription->getProjet() === $this) {
+                $inscription->setProjet(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->Owner;
+    }
+
+    public function setOwner(?User $Owner): static
+    {
+        $this->Owner = $Owner;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

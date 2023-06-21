@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Inscription;
 use App\Entity\Projet;
 use App\Entity\Skill;
 use App\Entity\User;
@@ -65,6 +66,7 @@ class DashboardController extends AbstractDashboardController
 
             MenuItem::section('Projets'),
             MenuItem::linkToCrud('Projets', 'fa fa-diagram-project', Projet::class),
+            MenuItem::linkToCrud('Inscriptions', 'fa fa-sign-in', Inscription::class),
 
             MenuItem::section(),
             MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out'),

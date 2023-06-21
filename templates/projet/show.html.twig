@@ -24,8 +24,8 @@
                                 <h4 class="mb-1 me-1">Equipe :</h4>
                                 <div class="d-flex flex-column">
                                     <ul>
-                                        {% for user in projet.equipe %}
-                                            <li> {{ user }}</li>
+                                        {% for inscription in projet.inscriptions %}
+                                            <li> {{ inscription.user }}</li>
                                         {% endfor %}
                                     </ul>
                                 </div>

@@ -43,7 +43,8 @@ class ProjetRepository extends ServiceEntityRepository
     public function getMesProjets(User $user)
     {
         $qb = $this->createQueryBuilder("p")
-            ->where(':user MEMBER OF p.users')
+            ->leftJoin("p.inscriptions", "i")
+            ->where('i.user = :user')
             ->setParameters(array('user' => $user));
         return $qb->getQuery()->getResult();
     }

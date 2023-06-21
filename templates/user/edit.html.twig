@@ -26,8 +26,14 @@
             let type_user = $("#user_type").val();
             if (type_user === 'Etudiant') {
                 $("#competences").show();
+                $("#user_skills").attr("required", "required");
+                $("#user_niveau").attr("required", "required");
+                $("#user_interets").attr("required", "required");
             } else {
                 $("#competences").hide();
+                $("#user_skills").attr("required", null);
+                $("#user_niveau").attr("required", null);
+                $("#user_interets").attr("required", null);
             }
         }
 

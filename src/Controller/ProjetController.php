@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Inscription;
 use App\Entity\Projet;
+use App\Entity\SkillTypeEnum;
 use App\Entity\User;
 use App\Form\ProjetType;
+use App\Repository\InscriptionRepository;
 use App\Repository\ProjetRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +25,8 @@ class ProjetController extends AbstractController
     {
         $projets = $projetRepository->findAll();
         return $this->render('projet/list.twig', [
-            'projets' => $projets
+            'projets' => $projets,
+            'roles' => SkillTypeEnum::choices()
         ]);
     }
 
@@ -145,11 +149,16 @@ class ProjetController extends AbstractController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/{id}/addUser', name: 'app_projet_adduser', methods: ['GET'])]
-    public function addUser(Request $request, Projet $projet, ProjetRepository $projetRepository): Response
+    #[Route('/{id}/addUser/{role}', name: 'app_projet_adduser', methods: ['GET'])]
+    public function addUser(Request $request, Projet $projet, ProjetRepository $projetRepository, InscriptionRepository $inscriptionRepository, string $role): Response
     {
         $user = $this->getUser();
-        $projet->addUser($user);
+        $inscription = new Inscription();
+        $inscription->setProjet($projet);
+        $inscription->setUser($user);
+        $inscription->setRole($role);
+        $projet->addInscription($inscription);
+        $inscriptionRepository->save($inscription, true);
         $projetRepository->save($projet, true);
 
         $route = $request->headers->get('referer');

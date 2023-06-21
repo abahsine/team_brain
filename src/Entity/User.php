@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -18,6 +19,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
+    #[Groups("user_detail")]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
@@ -27,7 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private array $roles = [];
-    
+
     #[ORM\Column]
     private ?string $password = null;
 
@@ -67,9 +69,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $facebookId = null;
 
-    #[ORM\ManyToMany(targetEntity: Projet::class, inversedBy: 'users')]
-    private Collection $projets;
-
     #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'users')]
     private Collection $skills;
 
@@ -91,15 +90,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?array $frameworks = [];
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Inscription::class, orphanRemoval: true)]
+    private Collection $inscriptions;
+
+    #[ORM\OneToMany(mappedBy: 'Owner', targetEntity: Projet::class)]
+    private Collection $projets;
+
     public function __construct()
     {
-        $this->projets = new ArrayCollection();
         $this->skills = new ArrayCollection();
+        $this->inscriptions = new ArrayCollection();
+        $this->projets = new ArrayCollection();
     }
 
     public function __toString(): string
     {
-        return $this->getUsername() ?? $this->getEmail();
+        return $this->getUsername() ?? $this->getPrenom() ?? $this->getEmail();
     }
 
     public function getEmail(): ?string
@@ -304,30 +310,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Projet>
-     */
-    public function getProjets(): Collection
-    {
-        return $this->projets;
-    }
-
-    public function addProjet(Projet $projet): static
-    {
-        if (!$this->projets->contains($projet)) {
-            $this->projets->add($projet);
-        }
-
-        return $this;
-    }
-
-    public function removeProjet(Projet $projet): static
-    {
-        $this->projets->removeElement($projet);
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getGoogleId(): ?string
@@ -452,6 +434,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFrameworks(?array $frameworks): static
     {
         $this->frameworks = $frameworks;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Inscription>
+     */
+    public function getInscriptions(): Collection
+    {
+        return $this->inscriptions;
+    }
+
+    public function addInscription(Inscription $inscription): static
+    {
+        if (!$this->inscriptions->contains($inscription)) {
+            $this->inscriptions->add($inscription);
+            $inscription->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscription(Inscription $inscription): static
+    {
+        if ($this->inscriptions->removeElement($inscription)) {
+            // set the owning side to null (unless already changed)
+            if ($inscription->getUser() === $this) {
+                $inscription->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Projet>
+     */
+    public function getProjets(): Collection
+    {
+        return $this->projets;
+    }
+
+    public function addProjet(Projet $projet): static
+    {
+        if (!$this->projets->contains($projet)) {
+            $this->projets->add($projet);
+            $projet->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProjet(Projet $projet): static
+    {
+        if ($this->projets->removeElement($projet)) {
+            // set the owning side to null (unless already changed)
+            if ($projet->getOwner() === $this) {
+                $projet->setOwner(null);
+            }
+        }
 
         return $this;
     }

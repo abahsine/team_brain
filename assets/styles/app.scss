@@ -6,7 +6,7 @@ body {
 }
 
 label.required:after {
-  content: "*";
+  content: " *";
   color: red;
 }
 

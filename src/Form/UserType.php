@@ -2,9 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\FrameworkEnum;
 use App\Entity\Skill;
-use App\Entity\SkillTypeEnum;
 use App\Entity\User;
 use App\Entity\UserInteretEnum;
 use App\Entity\UserNiveauEnum;
@@ -23,14 +21,28 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var User $user */
+        $user = $builder->getData();
         $builder
-            ->add('email', EmailType::class, ['attr' => ['readonly' => 'readonly'], 'required' => true])
-            ->add('type', ChoiceType::class, [
+            ->add('email', EmailType::class, ['attr' => ['readonly' => 'readonly'], 'required' => true]);
+
+        if ($user->getType() != UserTypeEnum::Unknown->value) {
+            $builder->add('type', ChoiceType::class, [
                 'label' => 'Vous êtes',
                 'choices' => UserTypeEnum::choices(),
                 'label_attr' => ['class' => 'fw-bold'],
-            ])
-            ->add('username', TextType::class, ["required" => false, 'help' => 'Choisissez un username pour cacher votre email.'])
+                'disabled' => true,
+            ]);
+        } else {
+            $builder->add('type', ChoiceType::class, [
+                'label' => 'Vous êtes',
+                'choices' => UserTypeEnum::choices(),
+                'label_attr' => ['class' => 'fw-bold'],
+                'required' => true
+            ]);
+        }
+
+        $builder->add('username', TextType::class, ["required" => false, 'help' => 'Choisissez un username pour cacher votre prénom ou votre email sur les projets.'])
             ->add('adresse')
             ->add('codePostal')
             ->add('telephone', TelType::class)
@@ -47,28 +59,17 @@ class UserType extends AbstractType
                 "expanded" => false,
                 "by_reference" => false,
                 "mapped" => true,
-                "required" => false,
+                "required" => true,
                 "attr" => ["class" => "js-example-basic-single", "style" => "width:100%;"]
             ])
             ->add('niveau', ChoiceType::class, [
                 'choices' => UserNiveauEnum::choices(),
-                "required" => false,
-            ])
-            ->add('preference', ChoiceType::class, [
-                'choices' => SkillTypeEnum::choices(),
-                "required" => false,
+                "required" => true,
             ])
             ->add('interets', ChoiceType::class, [
+                'label' => 'Préférences',
                 'choices' => UserInteretEnum::choices(),
-                "required" => false,
-                'multiple' => true,
-                'expanded' => false,
-                "attr" => ["class" => "js-example-basic-single", "style" => "width:100%;"]
-            ])
-            ->add('frameworks', ChoiceType::class, [
-                'choices' => FrameworkEnum::choices(),
-                "required" => false,
-                'label' => 'Frameworks et CMS',
+                "required" => true,
                 'multiple' => true,
                 'expanded' => false,
                 "attr" => ["class" => "js-example-basic-single", "style" => "width:100%;"]
