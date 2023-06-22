@@ -1,0 +1,78 @@
+<div class="modal" id="inscriptionModal" tabindex="-1" aria-labelledby="Inscription" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="inscriptionModalLabel">Inscription au projet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="">
+                    <input type="hidden" id="projet_id">
+                    <div class="alert alert-info">Au vue des compétences issues de votre profil vous <span
+                                id="info-roles"></span></div>
+                    <label for="role">Votre rôle dans le projet : </label>
+                    <select name="role" name="role" id="role" class="form-select"
+                            aria-label="Votre rôle dans le projet">
+                        {% for label, value in roles %}
+                            <option id="option-{{ value }}" value="{{ value }}" disabled>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" id="send-inscription" class="btn btn-primary">S'inscrire</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        let inscriptionModal = new bootstrap.Modal(document.getElementById('inscriptionModal'), {
+            keyboard: false
+        })
+
+        const buttons = document.querySelectorAll('.rejoindre-projet');
+        const input_projet_id = document.getElementById('projet_id');
+        const select_role = document.getElementById('role');
+
+
+        document.getElementById('send-inscription').addEventListener('click', event => {
+            window.location = "/projets/" + input_projet_id.value + "/addUser/" + select_role.value
+        })
+
+        Array.from(buttons).forEach(function (button) {
+            button.addEventListener('click', async event => {
+                let roles = [];
+                let errors = false
+                event.preventDefault();
+                await fetch('/projets/' + button.dataset.projetId + '/roles')
+                    .then(function (response) {
+                        return response.json();
+                    }).then(function (data) {
+                        document.getElementById('option-Frontend').setAttribute('disabled', "")
+                        document.getElementById('option-Backend').setAttribute('disabled', "")
+                        document.getElementById('option-Fullstack').setAttribute('disabled', "")
+                        for (let prop in data) {
+                            document.getElementById('option-' + data[prop]).removeAttribute('disabled');
+                            roles.push("<b>" + prop + '</b>');
+                        }
+                    }).catch(function (event) {
+                        window.location = '/login?message=connect'
+                        errors = true;
+                    });
+                if (errors)
+                    return false;
+                if (roles.length === 0) {
+                    document.getElementById('info-roles').innerHTML = "ne pouvez postuler à rien";
+                } else {
+                    document.getElementById('info-roles').innerHTML = "pouvez postuler en tant que " + roles.join(' ou ');
+                }
+
+                input_projet_id.value = button.dataset.projetId;
+                inscriptionModal.show();
+            });
+        });
+    };
+</script>

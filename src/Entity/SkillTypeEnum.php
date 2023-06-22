@@ -11,9 +11,9 @@ enum SkillTypeEnum: string
     public static function choices(): array
     {
         return [
+            SkillTypeEnum::Fullstack->value => SkillTypeEnum::Fullstack->name,
             SkillTypeEnum::Backend->value => SkillTypeEnum::Backend->name,
             SkillTypeEnum::Frontend->value => SkillTypeEnum::Frontend->name,
-            SkillTypeEnum::Fullstack->value => SkillTypeEnum::Fullstack->name,
         ];
     }
 

@@ -9,9 +9,12 @@ use App\Entity\User;
 use App\Form\ProjetType;
 use App\Repository\InscriptionRepository;
 use App\Repository\ProjetRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,11 +24,24 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class ProjetController extends AbstractController
 {
     #[Route('/', name: 'projets')]
-    public function dashboard(ProjetRepository $projetRepository): Response
+    public function dashboard(PaginatorInterface $paginator, ProjetRepository $projetRepository, Request $request): Response
     {
-        $projets = $projetRepository->findAll();
+        $pagination = $paginator->paginate(
+            $projetRepository->searchProjets($request->query->getString('q', '')),
+            $request->query->getInt('page', 1), /*page number*/
+            10,
+            [
+                'defaultSortFieldName' => ['p.createdAt'],
+                'defaultSortDirection' => 'desc',
+            ]
+        );
+
+        $pagination->setCustomParameters([
+            'align' => 'center',
+        ]);
+
         return $this->render('projet/list.twig', [
-            'projets' => $projets,
+            'projets' => $pagination,
             'roles' => SkillTypeEnum::choices()
         ]);
     }
@@ -34,7 +50,7 @@ class ProjetController extends AbstractController
     public function mesProjets(ProjetRepository $projetRepository): Response
     {
         $projets = $projetRepository->getMesProjets($this->getUser());
-        return $this->render('projet/list.twig', [
+        return $this->render('projet/mes-projets.html.twig', [
             'projets' => $projets
         ]);
     }
@@ -86,6 +102,8 @@ class ProjetController extends AbstractController
     {
         return $this->render('projet/show.html.twig', [
             'projet' => $projet,
+            'rolesAvailable' => $this->getRoles($projet),
+            'roles' => SkillTypeEnum::choices(),
         ]);
     }
 
@@ -163,5 +181,61 @@ class ProjetController extends AbstractController
 
         $route = $request->headers->get('referer');
         return $this->redirect($route);
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/{id}/roles', name: 'show_roles', methods: ['GET'])]
+    public function roles(Request $request, Projet $projet): Response
+    {
+        $roles = $this->getRoles($projet);
+
+        return new JsonResponse($roles->toArray());
+    }
+
+    private function getRoles(Projet $projet): ?ArrayCollection
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$user)
+            return null;
+        if (!$user->isEtudiant()) {
+            return null;
+        }
+
+        $roles = new ArrayCollection(SkillTypeEnum::choices());
+        $inscriptions = $projet->getInscriptions();
+        foreach ($inscriptions as $inscription) {
+            $role = $inscription->getRole();
+            if ($roles->contains($role)) {
+                $roles->removeElement($role);
+            }
+        }
+
+        $skills = $user->getSkills();
+        $frontend = false;
+        $backend = false;
+        $fullstack = false;
+        foreach ($skills as $skill) {
+            if ($skill->getType() === SkillTypeEnum::Frontend->name) {
+                $frontend = true;
+            }
+            if ($skill->getType() === SkillTypeEnum::Backend->name) {
+                $backend = true;
+            }
+            if ($skill->getType() === SkillTypeEnum::Fullstack->name) {
+                $fullstack = true;
+            }
+        }
+
+        if ($backend && $frontend)
+            $fullstack = true;
+
+        if (!$fullstack)
+            $roles->removeElement(SkillTypeEnum::Fullstack->name);
+        if (!$backend)
+            $roles->removeElement(SkillTypeEnum::Backend->name);
+        if (!$frontend)
+            $roles->removeElement(SkillTypeEnum::Frontend->name);
+        return $roles;
     }
 }

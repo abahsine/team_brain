@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <section>
+        <div class="container py-1 text-center">
+            <h1 class="display-5 fw-bold">Mes projets</h1>
+        </div>
+    </section>
+    <section style="background-color: #eee;">
+        <div class="container py-5">
+            {% for projet in projets %}
+                {% set complet =  3 - projet.inscriptions.count == 0 %}
+                <div class="row justify-content-center mb-3">
+                    <div class="col-md-12 col-xl-10">
+                        <div class="card shadow-0 border rounded-3">
+                            <div style="min-height: 150px" class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                                        <div class="bg-image hover-zoom ripple rounded ripple-surface">
+                                            <a href="{{ path('app_projet_show', {id: projet.id}) }}">
+                                                {% set image = '/uploads/projets/projet.jpg' %}
+                                                {% if projet.image is not empty %}
+                                                    <img src="{{ asset('/uploads/projets/')~projet.image }}"
+                                                         class="w-100"/>
+                                                {% else %}
+                                                    <img src="{{ asset(image) }}"
+                                                         class="w-100"/>
+                                                {% endif %}
+                                                <div class="hover-overlay">
+                                                    <div class="mask"
+                                                         style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 col-xl-6">
+                                        <a style="text-decoration: none;color: inherit;"
+                                           href="{{ path('app_projet_show', {id: projet.id}) }}">
+                                            <h5>{{ projet.titre }}</h5>
+                                        </a>
+                                        <hr>
+
+                                        {% if complet %}
+                                            <h6>Contacts</h6>
+                                            <div class="row">
+                                                <dl class="col-6">
+                                                    <dt>Responsable</dt>
+                                                    <dd class="mb-0 small mx-sm-4">{{ projet.owner.nom|upper }} {{ projet.owner.prenom|capitalize }}</dd>
+                                                    <dd class="mb-0 small mx-sm-4">{{ projet.owner.email }}</dd>
+                                                    <dd class="mb-0 small mx-sm-4">{{ projet.owner.telephone }}</dd>
+                                                </dl>
+                                                {% for inscription in projet.inscriptions %}
+                                                    <dl class="col-6">
+                                                        <dt>{{ inscription.rolelabel }}</dt>
+                                                        <dd class="mb-0 small mx-sm-4">{{ inscription.user.nom|upper }} {{ inscription.user.prenom|capitalize }}</dd>
+                                                        <dd class="mb-0 small mx-sm-4">{{ inscription.user.email }}</dd>
+                                                        <dd class="mb-0 small mx-sm-4">{{ inscription.user.telephone }}</dd>
+                                                    </dl>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            <div class="alert alert-info">Vous ne verez les contacts qu'une fois
+                                                l'équipe au complet.
+                                            </div>
+                                        {% endif %}
+
+                                    </div>
+                                    <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
+                                        <div class="d-flex flex-row align-items-center mb-1">
+                                            <h4 class="mb-1 me-1">Equipe :</h4>
+                                        </div>
+                                        <div class="d-flex flex-column">
+                                            <ul>
+                                                {% for inscription in projet.inscriptions %}
+                                                    <li>
+                                                        {{ inscription.roleLabel }} : {{ inscription.user }}
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        {% if complet %}
+                                            <h6 class="text-success">Projet complet</h6>
+                                        {% else %}
+                                            <h6 class="text-success">Place(s) restante(s)
+                                                : {{ 3 - projet.inscriptions.count }}</h6>
+                                        {% endif %}
+                                        {% if app.user.entrepreneur is defined and app.user.entrepreneur and projet.owner == app.user %}
+                                            <a style='position: absolute; bottom: 10px;right: 10px'
+                                               href="{{ path('app_projet_edit',{id:projet.id}) }}"
+                                               class="btn btn-sm btn-outline-warning">Editer</a>
+                                            <form method="post"
+                                                  action="{{ path('app_projet_delete', {'id': projet.id}) }}"
+                                                  onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                                <input type="hidden" name="_token"
+                                                       value="{{ csrf_token('delete' ~ projet.id) }}">
+                                                <button style='position: absolute; bottom: 10px;right: 75px'
+                                                        class="btn btn-sm btn-outline-danger">Supprimer
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

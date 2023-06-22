@@ -13,18 +13,21 @@
                 </div>
             {% endif %}
             <div class="row justify-content-center mb-3">
-                <form action="">
+                <form action="" method="get">
                     <div class="input-group">
-                        <input class="form-control border-end-0 border" type="search" placeholder="Search"
+                        <input class="form-control border-end-0 border" type="search" name="q" placeholder="..."
                                id="example-search-input">
-                        <button class="btn btn-dark" type="submit">Search</button>
+                        <button class="btn btn-dark" type="submit">Rechercher</button>
                     </div>
                 </form>
             </div>
         </div>
     </section>
     <section style="background-color: #eee;">
-        <div class="container py-5">
+        <div class="container py-3">
+            <div class="navigation">
+                {{ knp_pagination_render(projets) }}
+            </div>
             {% for projet in projets %}
                 <div class="row justify-content-center mb-3">
                     <div class="col-md-12 col-xl-10">
@@ -60,7 +63,7 @@
                                             {% endif %}
                                             {% if false %}
                                                 <div class="d-flex flex-row mt-1">
-                                                    <span>Contact : {{ projet.owner|capitalize }}</span>
+                                                    <span>Contact : {{ projet.owner }}</span>
                                                 </div>
                                             {% endif %}
                                             <div class="mt-1 mb-2 mb-0 text-muted small">
@@ -84,45 +87,14 @@
                                         <div class="d-flex flex-column">
                                             <ul>
                                                 {% for inscription in projet.inscriptions %}
-                                                    <li> {{ inscription.user|capitalize }}
-                                                        - {{ inscription.roleLabel }}</li>
+                                                    <li>{{ inscription.roleLabel }} : {{ inscription.user }}</li>
                                                 {% endfor %}
                                             </ul>
                                         </div>
                                         <h6 class="text-success">Place(s) restante(s)
                                             : {{ 3 - projet.inscriptions.count }}</h6>
                                         <div class="d-flex mt-4">
-                                            {% if (app.user and projet.containUser(app.user) == false and app.user.isEtudiant) or app.user is empty %}
-                                                <a href="#"
-                                                   class="btn btn-outline-success btn-sm mt-2 rejoindre-projet"
-                                                   style="position:absolute; bottom:15px; right: 15px"
-                                                   data-projet-id="{{ projet.id }}"
-                                                   type="button">Rejoindre
-                                                </a>
-                                            {% elseif(app.user and projet.containUser(app.user) == true and app.user.isEtudiant) %}
-                                                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                                                    <symbol id="check-circle-fill" viewBox="0 0 16 16">
-                                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                                                    </symbol>
-                                                </svg>
-                                                <div class="alert text-success alert-success d-flex align-items-center"
-                                                     role="alert">
-                                                    <svg style='fill:green' class="bi text-success flex-shrink-0 me-2"
-                                                         width="24"
-                                                         height="24" role="img"
-                                                         aria-label="Success:">
-                                                        <use xlink:href="#check-circle-fill"/>
-                                                    </svg>
-                                                    <div>
-                                                        Déjà dans le projet
-                                                    </div>
-                                                </div>
-                                            {% elseif app.user.entrepreneur is defined and app.user.entrepreneur and projet.owner == app.user %}
-                                                <a style='position: absolute; bottom: 10px;right: 10px'
-                                                   href="{{ path('app_projet_edit',{id:projet.id}) }}"
-                                                   class="btn btn-sm btn-outline-warning">Editer</a>
-                                            {% else %}
-                                            {% endif %}
+                                            {% include 'projet/_rejoindre-button.html.twig' %}
                                         </div>
                                     </div>
                                 </div>
@@ -131,87 +103,13 @@
                     </div>
                 </div>
             {% endfor %}
-        </div>
-    </section>
-    <div class="modal" id="inscriptionModal" tabindex="-1" aria-labelledby="Inscription" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="inscriptionModalLabel">Inscription au projet</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="">
-                        <input type="hidden" id="projet_id">
-                        <div class="alert alert-info">Au vue des compétences issues de votre profil vous <span
-                                    id="info-roles"></span></div>
-                        <label for="role">Votre rôle dans le projet : </label>
-                        <select name="role" name="role" id="role" class="form-select"
-                                aria-label="Votre rôle dans le projet">
-                            {% for label, value in roles %}
-                                <option id="option-{{ value }}" value="{{ value }}" disabled>{{ label }}</option>
-                            {% endfor %}
-                        </select>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    <button type="button" id="send-inscription" class="btn btn-primary">S'inscrire</button>
+            {% if projets.count == 0 %}
+            <div class="alert alert-warning mb-0">Aucun projet trouvé
+                {% endif %}
+                <div class="navigation">
+                    {{ knp_pagination_render(projets) }}
                 </div>
             </div>
-        </div>
-    </div>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        window.onload = function () {
-            let inscriptionModal = new bootstrap.Modal(document.getElementById('inscriptionModal'), {
-                keyboard: false
-            })
-
-            const buttons = document.querySelectorAll('.rejoindre-projet');
-            const input_projet_id = document.getElementById('projet_id');
-            const select_role = document.getElementById('role');
-
-
-            document.getElementById('send-inscription').addEventListener('click', event => {
-                window.location = "/projets/" + input_projet_id.value + "/addUser/" + select_role.value
-            })
-
-            Array.from(buttons).forEach(function (button) {
-                button.addEventListener('click', async event => {
-                    let roles = [];
-                    let errors = false
-                    event.preventDefault();
-                    await fetch('/inscriptions/' + button.dataset.projetId + '/roles')
-                        .then(function (response) {
-                            return response.json();
-                        }).then(function (data) {
-                            document.getElementById('option-Frontend').setAttribute('disabled', "")
-                            document.getElementById('option-Backend').setAttribute('disabled', "")
-                            document.getElementById('option-Fullstack').setAttribute('disabled', "")
-                            for (let prop in data) {
-                                document.getElementById('option-' + data[prop]).removeAttribute('disabled');
-                                roles.push("<b>" + prop + '</b>');
-                            }
-                        }).catch(function (event) {
-                            window.location = '/login?message=connect'
-                            errors = true;
-                        });
-                    if (errors)
-                        return false;
-                    if (roles.length === 0) {
-                        document.getElementById('info-roles').innerHTML = "ne pouvez postuler à rien";
-                    } else {
-                        document.getElementById('info-roles').innerHTML = "pouvez postuler en tant que " + roles.join(' ou ');
-                    }
-
-                    input_projet_id.value = button.dataset.projetId;
-                    inscriptionModal.show();
-                });
-            });
-        };
-    </script>
+    </section>
+    {% include 'projet/_modal-rejoindre.html.twig' %}
 {% endblock %}

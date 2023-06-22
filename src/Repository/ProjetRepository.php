@@ -45,8 +45,32 @@ class ProjetRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder("p")
             ->leftJoin("p.inscriptions", "i")
             ->where('i.user = :user')
+            ->orWhere("p.Owner = :user")
             ->setParameters(array('user' => $user));
         return $qb->getQuery()->getResult();
+    }
+
+    public function searchProjets(string $search = '')
+    {
+        $qb = $this->createQueryBuilder("p");
+        dump($this->incomplete());
+        $qb
+            ->leftJoin('p.skills', 's')
+            ->where("p.titre like :search or p.description like :search or s.tag like :search")
+            ->andWhere('p.id NOT IN (' . $this->incomplete()->getDQL() . ')')
+            ->setParameters(['search' => '%' . $search . '%']);
+
+        return $qb->getQuery();
+    }
+
+    public function incomplete()
+    {
+        $qb = $this->createQueryBuilder("p1")
+            ->select("p1.id")
+            ->leftJoin('p1.inscriptions', 'i2')
+            ->groupBy('p1.id')
+            ->having('count(i2)>=3');
+        return $qb->getQuery();
     }
 
 //    /**

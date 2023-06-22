@@ -34,6 +34,11 @@
                                     <a href="{{ path('app_user_edit',{id: app.user.id}) }}" class="nav-link">Mes
                                         informations</a>
                                 </li>
+                                {% if app.user.entrepreneur %}
+                                    <li class="nav-item dropdown-item">
+                                        <a href="{{ path('app_projet_new') }}" class="nav-link">Ajouter un projet</a>
+                                    </li>
+                                {% endif %}
                                 <li class="nav-item dropdown-item">
                                     <a href="{{ path('mes_projets') }}" class="nav-link">Mes
                                         projets</a>
@@ -41,11 +46,6 @@
                                 {% if is_granted('ROLE_ADMIN') %}
                                     <li class="nav-item dropdown-item">
                                         <a href="{{ path('admin') }}" class="nav-link">Admin</a>
-                                    </li>
-                                {% endif %}
-                                {% if app.user.entrepreneur %}
-                                    <li class="nav-item dropdown-item">
-                                        <a href="{{ path('app_projet_new') }}" class="nav-link">Ajouter un projet</a>
                                     </li>
                                 {% endif %}
                                 <li>
