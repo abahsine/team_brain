@@ -38,7 +38,7 @@ class ProjetCrudController extends AbstractCrudController
             Field::new('createdAt')
                 ->hideOnForm(),
             Field::new('updatedAt')
-                ->hideOnForm(),
+                ->hideOnForm()->hideOnIndex(),
             TextField::new('titre'),
             ImageField::new('image')
                 ->setUploadDir('/public/uploads/projets/')
@@ -46,13 +46,13 @@ class ProjetCrudController extends AbstractCrudController
                 ->setLabel('Image'),
             AssociationField::new('Owner')
                 ->autocomplete(),
-            TextEditorField::new('description'),
             ChoiceField::new('type')
-                ->setChoices(UserInteretEnum::cases())
+                ->setChoices(UserInteretEnum::choices())
                 ->setColumns(4),
             AssociationField::new('skills')
                 ->autocomplete()
                 ->setFormTypeOption('by_reference', false),
+            TextEditorField::new('description')->hideOnIndex(),
             AssociationField::new('inscriptions')
                 ->hideOnForm(),
         ];

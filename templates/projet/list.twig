@@ -56,16 +56,21 @@
                                         <a style="text-decoration: none;color: inherit;"
                                            href="{{ path('app_projet_show', {id: projet.id}) }}">
                                             <h5>{{ projet.titre }}</h5>
-                                            {% if projet.type %}
-                                                <div class="d-flex flex-row">
-                                                    <span class="badge bg-primary">{{ projet.typeLabel }}</span>
+                                            <div class="row">
+                                                <div class="col-6 text-muted small">
+                                                    {{ projet.createdAt|format_datetime(locale='fr',pattern="dd MMMM YYYY") }}
                                                 </div>
-                                            {% endif %}
-                                            {% if false %}
-                                                <div class="d-flex flex-row mt-1">
-                                                    <span>Contact : {{ projet.owner }}</span>
-                                                </div>
-                                            {% endif %}
+                                                {% if projet.type %}
+                                                    <div class="col-6 text-end">
+                                                        <span class="badge bg-primary">{{ projet.typeLabel }}</span>
+                                                    </div>
+                                                {% endif %}
+                                                {% if false %}
+                                                    <div class="col-6">
+                                                        <span>Contact : {{ projet.owner }}</span>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
                                             <div class="mt-1 mb-2 mb-0 text-muted small">
                                                 {% for skill in projet.skills %}
                                                     <span>{{ skill.tag }}</span>

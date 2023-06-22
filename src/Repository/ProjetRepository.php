@@ -53,7 +53,6 @@ class ProjetRepository extends ServiceEntityRepository
     public function searchProjets(string $search = '')
     {
         $qb = $this->createQueryBuilder("p");
-        dump($this->incomplete());
         $qb
             ->leftJoin('p.skills', 's')
             ->where("p.titre like :search or p.description like :search or s.tag like :search")
