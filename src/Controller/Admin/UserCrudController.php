@@ -108,7 +108,7 @@ class UserCrudController extends AbstractCrudController
             AssociationField::new('projets')
                 ->autocomplete()
                 ->setFormTypeOption('by_reference', false),
-
+            AssociationField::new('inscriptions')->onlyOnIndex(),
             FormField::addTab('Sécurité'),
             ChoiceField::new('roles')
                 ->setChoices(array_combine($roles, $roles))
