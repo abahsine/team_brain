@@ -1,9 +1,11 @@
 {% if (app.user and projet.containUser(app.user) == false and app.user.isEtudiant) or app.user is empty %}
-    <a href="#"
-       class="btn btn-outline-success btn-sm align-self-end rejoindre-projet"
-       data-projet-id="{{ projet.id }}"
-       type="button">Rejoindre
-    </a>
+    <div class="d-flex justify-content-end">   
+        <a href="#"
+           class="btn btn-outline-success btn-sm align-self-end rejoindre-projet"
+           data-projet-id="{{ projet.id }}"
+           type="button">Rejoindre
+        </a>
+    </div>
 {% elseif(app.user and projet.containUser(app.user) == true and app.user.isEtudiant) %}
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <symbol id="check-circle-fill" viewBox="0 0 16 16">
@@ -23,14 +25,16 @@
         </div>
     </div>
 {% elseif app.user.entrepreneur is defined and app.user.entrepreneur and projet.owner == app.user %}
-    <a
-       href="{{ path('app_projet_edit',{id:projet.id}) }}"
-       class="btn btn-sm btn-outline-warning align-self-end mx-2">Editer</a>
-    <form method="post" action="{{ path('app_projet_delete', {'id': projet.id}) }}"
-          onsubmit="return confirm('Are you sure you want to delete this item?');">
-        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ projet.id) }}">
-        <button class="btn btn-sm btn-outline-danger align-self-end">Supprimer
-        </button>
-    </form>
+    <div class="d-flex justify-content-end">
+        <a
+           href="{{ path('app_projet_edit',{id:projet.id}) }}"
+           class="btn btn-sm btn-outline-warning align-self-end mx-2">Editer</a>
+        <form method="post" action="{{ path('app_projet_delete', {'id': projet.id}) }}"
+              onsubmit="return confirm('Are you sure you want to delete this item?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ projet.id) }}">
+            <button class="btn btn-sm btn-outline-danger align-self-end">Supprimer
+            </button>
+        </form>
+    </div>
 {% else %}
 {% endif %}
