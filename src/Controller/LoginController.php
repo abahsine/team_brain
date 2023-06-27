@@ -32,6 +32,6 @@ class LoginController extends AbstractController
     #[Route('/', name: 'home', methods: ['GET'])]
     public function home(UserRepository $userRepository): Response
     {
-        return $this->redirectToRoute('projets');
+        return $this->render('home.html.twig', []);
     }
 }
