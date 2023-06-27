@@ -4,14 +4,14 @@
 
 {% block body %}
     {% set complet =  3 - projet.inscriptions.count == 0 %}
-    <div class="container mt-5 mb-5">
+    <div class="container mb-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-10">
                 <div class="card">
                     <div class="row">
                         <div class="col-lg-6 order-3">
-                            <div class="images p-3">
-                                <div class="text-center p-4">
+                            <div class="images p-lg-3">
+                                <div class="text-center p-lg-4">
                                     {% set image = '/uploads/projets/projet.jpg' %}
                                     {% if projet.image is not empty %}
                                         <img src="{{ asset('/uploads/projets/')~projet.image }}"
@@ -21,7 +21,7 @@
                                              class="w-100"/>
                                     {% endif %}
                                 </div>
-                                <div class="px-4 pb-2" style="position: relative;">
+                                <div class="px-4 py-2" style="position: relative;">
                                     <h4 class="mb-1 me-1">Equipe :</h4>
                                     <div class="d-flex flex-column">
                                         <ul>
@@ -40,7 +40,6 @@
                                                 </li>
                                             {% endfor %}
                                         </ul>
-                                        {% include 'projet/_rejoindre-button.html.twig' %}
                                     </div>
                                 </div>
                             </div>
@@ -70,6 +69,9 @@
                                         </div>
                                     {% endif %}
                                 {% endif %}
+                                <div class="py-2">
+                                    {% include 'projet/_rejoindre-button.html.twig' %}
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-6 order-1">
@@ -84,8 +86,7 @@
                                     </a>
                                     <i class="fa fa-shopping-cart text-muted"></i>
                                 </div>
-                                <div class="mt-4 mb-3">
-
+                                <div class="mt-2 mb-3">
                                     <h5 class="text-uppercase">{{ projet.titre }}</h5>
                                     <div><span class="text-muted brand">Responsable :</span> {{ projet.owner }}</div>
                                     <div><span class="text-muted brand">Type :</span> {{ projet.typeLabel }}</div>

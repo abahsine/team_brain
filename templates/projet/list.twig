@@ -12,7 +12,7 @@
                         un projet</a>
                 </div>
             {% endif %}
-            <div class="row justify-content-center mb-3">
+            <div class="mx-auto col-xl-10 justify-content-center mb-3">
                 <form action="" method="get">
                     <div class="input-group">
                         <input class="form-control border-end-0 border" type="search" name="q" placeholder="..."
@@ -98,7 +98,7 @@
                                         </div>
                                         <h6 class="text-success">Place(s) restante(s)
                                             : {{ 3 - projet.inscriptions.count }}</h6>
-                                        <div class="d-flex mt-4">
+                                        <div class="d-flex mt-4 justify-content-end">
                                             {% include 'projet/_rejoindre-button.html.twig' %}
                                         </div>
                                     </div>
