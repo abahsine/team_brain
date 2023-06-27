@@ -85,7 +85,7 @@ class ProjetController extends AbstractController
                 }
                 $projet->setImage($newFilename);
             }
-            $projet->addUser($this->getUser());
+            $projet->setOwner($this->getUser());
             $projetRepository->save($projet, true);
 
             return $this->redirectToRoute('projets', [], Response::HTTP_SEE_OTHER);
