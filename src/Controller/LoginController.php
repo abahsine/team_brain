@@ -34,4 +34,10 @@ class LoginController extends AbstractController
     {
         return $this->render('home.html.twig', []);
     }
+
+    #[Route('/cgu', name: 'cgu', methods: ['GET'])]
+    public function cgu(UserRepository $userRepository): Response
+    {
+        return $this->render('cgu.html.twig', []);
+    }
 }
