@@ -1,13 +1,40 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Titre de la home
+    TeamBrains - Mise en relation entrepreneurs et développeurs
 {% endblock %}
 
 {% block body %}
 
-    <div class="container">
-        "Ici créer la page d'acceuil"
+    <div class="container mt-4">
+        <div class="jumbotron text-center">
+            <h1 class="display-4">Collaborer & Entreprendre<br>TeamBrains</h1>
+            <p class="lead">Le meilleur endroit pour démarrer vos projets et vous challengez</p>
+            <a href="#" class="btn btn-primary btn-lg blinking-btn">Inscrivez-vous dès maintenant</a>
+        </div>
+        <div class="row features">
+            <div class="col-md-6 feature">
+                <h2>Qu'est-ce que c'est ?</h2>
+                <p class="lead">TeamBrains est une plateforme de mise en relation entre des entrepreneurs et
+                    des développeurs étudiants/apprenants. Ensemble, nous faisons naître des prototypes web et logiciels
+                    innovants.</p>
+            </div>
+            <div class="col-md-6 feature">
+                <h2>Objectifs</h2>
+                <li>
+                    <strong>Entrepreneurs :</strong> Donnez vie à vos idées sans vous ruiner. Nos
+                    développeurs juniors vous aident à démarrer votre projet.
+                </li>
+                <li>
+                    <strong>Etudiants :</strong> Challengez vous et acquérez de l'expérience en travaillant en équipe
+                    sur des projets
+                    concrets et réels.
+                </li>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="#" class="btn btn-primary btn-lg blinking-btn">Découvrez nos projets</a>
+        </div>
     </div>
 
 {% endblock %}

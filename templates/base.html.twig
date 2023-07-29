@@ -12,6 +12,82 @@
               href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.0/dist/trix.css">
         {{ encore_entry_link_tags('app') }}
+        <style>
+            body {
+                background-color: #e3f2fd;
+                font-family: 'Arial', sans-serif;
+                line-height: 1.6;
+                color: #333;
+            }
+
+            .navbar-brand {
+                font-size: 2rem;
+                font-weight: bold;
+                color: #ff6600;
+            }
+
+            .jumbotron {
+                background-color: #675c5c; /*C'est ici pour changer la couleur à l'intérieur du cadre*/
+                color: #fff;
+                padding: 3rem;
+                border-radius: 20px;
+            }
+
+            .jumbotron h1 {
+                font-size: 4rem;
+            }
+
+            .jumbotron p {
+                font-size: 1.5rem;
+            }
+
+            .lead {
+                font-size: 1.2rem;
+                margin-bottom: 2rem;
+            }
+
+            /* Les deux btn-- coresspondent aux caractéristiques des boutons et :hover c'est pour le passage de la souris*/
+            .btn-primary {
+                background-color: #007BFF; /* Bleu primaire pour le bouton CTA */
+                border-color: #007BFF; /* Couleur de bordure du bouton CTA */
+                padding: 1rem 2rem;
+                font-size: 1.2rem;
+                font-weight: bold;
+                text-transform: uppercase;
+                border-radius: 30px;
+                transition: background-color 0.3s;
+            }
+
+            .btn-primary:hover {
+                background-color: #0056b3; /* Couleur de fond au survol du bouton CTA */
+                border-color: #0056b3; /* Couleur de bordure au survol du bouton CTA */
+            }
+
+            .features {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 3rem;
+            }
+
+            .feature {
+                flex: 1;
+                padding: 2rem;
+                text-align: center;
+                border-radius: 20px;
+                background-color: #fff;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .feature h2 {
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .feature p {
+                font-size: 1.1rem;
+                color: #666;
+            }
+        </style>
     {% endblock %}
 </head>
 
